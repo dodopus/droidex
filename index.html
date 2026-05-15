@@ -1,0 +1,1018 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Droidex Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* Tatooine night palette */
+    --bg-0: #050810;
+    --bg-1: #0a1020;
+    --panel: #0d1426;
+    --panel-2: #111a2e;
+    --panel-3: #16213a;
+    --border: #1f2c4a;
+    --border-bright: #2c3e6a;
+    --text: #e8ecf5;
+    --muted: #7e8aaa;
+
+    /* Star Wars accents */
+    --imperial-gold: #ffcc00;       /* credits gold */
+    --imperial-gold-soft: #ffe06a;
+    --imperial-gold-dim: #6e5a08;
+    --hologram: #6ad7ff;            /* holocron cyan */
+    --hologram-dim: #1e5a78;
+    --rebel-red: #ff3b3b;
+    --danger: #ff5e5e;
+
+    /* Tier colors */
+    --t-default-1: #6b7387;
+    --t-default-2: #2f3645;
+    --t-gold-1: #ffcc00;
+    --t-gold-2: #7a5a00;
+    --t-diamond-1: #79e6ff;
+    --t-diamond-2: #14506a;
+    --t-rainbow-1: #ff5e7a;
+    --t-rainbow-2: #ffb547;
+    --t-rainbow-3: #6fe07a;
+    --t-rainbow-4: #5fb7ff;
+    --t-rainbow-5: #b07cff;
+
+    /* Rarity colors */
+    --r-common: #9aa6c2;
+    --r-rare: #4a9bff;
+    --r-epic: #b865ff;
+    --r-legendary: #ffa01c;
+    --r-mythic: #ff3b6b;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    color: var(--text);
+    font-family: "Rajdhani", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14.5px;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.2px;
+    background-color: var(--bg-0);
+    background-image:
+      /* twin-sun horizon glow */
+      radial-gradient(900px 500px at 50% 105%, rgba(255, 138, 40, 0.18), transparent 60%),
+      radial-gradient(700px 400px at 35% 105%, rgba(255, 88, 40, 0.10), transparent 65%),
+      /* hologram glows from corners */
+      radial-gradient(1100px 700px at 10% -10%, rgba(106, 215, 255, 0.10), transparent 60%),
+      radial-gradient(900px 600px at 110% 0%, rgba(255, 204, 0, 0.06), transparent 55%),
+      /* starfield */
+      radial-gradient(1.5px 1.5px at 20% 30%, #ffffff 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 80% 10%, #ffffff 50%, transparent 51%),
+      radial-gradient(1px 1px at 65% 60%, #ffffff 50%, transparent 51%),
+      radial-gradient(1px 1px at 15% 75%, #ffffff 50%, transparent 51%),
+      radial-gradient(1px 1px at 45% 25%, #ffffff 50%, transparent 51%),
+      radial-gradient(1px 1px at 90% 80%, #ffffff 50%, transparent 51%),
+      radial-gradient(1px 1px at 35% 90%, #ffffff 50%, transparent 51%),
+      radial-gradient(1px 1px at 75% 45%, #ffffff 50%, transparent 51%),
+      linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 100%);
+    background-attachment: fixed;
+    background-size: auto, auto, auto, auto,
+                     400px 400px, 600px 600px, 500px 500px, 700px 700px,
+                     550px 550px, 800px 800px, 650px 650px, 450px 450px,
+                     auto;
+  }
+
+  /* horizontal scanline strip behind the header for sci-fi feel */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      180deg,
+      rgba(106, 215, 255, 0.025) 0px,
+      rgba(106, 215, 255, 0.025) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    z-index: 1;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    backdrop-filter: blur(10px);
+    background: linear-gradient(180deg, rgba(5, 8, 16, 0.92) 0%, rgba(5, 8, 16, 0.78) 100%);
+    border-bottom: 1px solid var(--border-bright);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(106, 215, 255, 0.04) inset;
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    position: relative;
+  }
+  /* glowing accent line under header */
+  header::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -1px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--imperial-gold) 30%, var(--hologram) 70%, transparent);
+    opacity: 0.6;
+  }
+  header h1 {
+    margin: 0;
+    font-family: "Orbitron", "Rajdhani", sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--imperial-gold);
+    text-shadow: 0 0 18px rgba(255, 204, 0, 0.35), 0 0 2px rgba(255, 204, 0, 0.8);
+  }
+  header h1 .accent {
+    color: var(--hologram);
+    text-shadow: 0 0 18px rgba(106, 215, 255, 0.45), 0 0 2px rgba(106, 215, 255, 0.9);
+  }
+  header h1 .slash {
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0;
+    opacity: 0.7;
+  }
+  header h1 .badge {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--imperial-gold);
+    box-shadow: 0 0 12px var(--imperial-gold), 0 0 4px var(--imperial-gold-soft);
+    animation: pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.55; transform: scale(0.85); }
+  }
+  header .stats {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-left: auto;
+    font-size: 11px;
+    font-family: "Orbitron", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+  }
+  header .stats .stat {
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--border-bright);
+    padding: 7px 12px;
+    border-radius: 4px;
+    color: var(--muted);
+    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  }
+  header .stats .stat b {
+    color: var(--imperial-gold);
+    font-weight: 700;
+    margin-left: 6px;
+    text-shadow: 0 0 6px rgba(255, 204, 0, 0.4);
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .toolbar input[type="search"] {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border-bright);
+    border-radius: 4px;
+    padding: 8px 12px;
+    width: 220px;
+    outline: none;
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: 0.6px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .toolbar input[type="search"]::placeholder { color: var(--muted); text-transform: uppercase; font-size: 11px; letter-spacing: 1.3px; }
+  .toolbar input[type="search"]:focus {
+    border-color: var(--hologram);
+    box-shadow: 0 0 0 1px var(--hologram), 0 0 14px rgba(106, 215, 255, 0.25);
+  }
+  .toolbar select, .toolbar button {
+    background: var(--panel);
+    color: var(--text);
+    border: 1px solid var(--border-bright);
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-family: "Orbitron", sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    transition: border-color 0.15s, color 0.15s, box-shadow 0.15s;
+  }
+  .toolbar select:hover, .toolbar button:hover {
+    border-color: var(--imperial-gold);
+    color: var(--imperial-gold-soft);
+    box-shadow: 0 0 12px rgba(255, 204, 0, 0.2);
+  }
+  .toolbar button.danger { color: var(--rebel-red); border-color: rgba(255, 59, 59, 0.4); }
+  .toolbar button.danger:hover { border-color: var(--rebel-red); color: var(--rebel-red); box-shadow: 0 0 14px rgba(255, 59, 59, 0.3); }
+  .toolbar label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    user-select: none;
+    font-family: "Orbitron", sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    padding: 6px 10px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .toolbar label:hover { color: var(--text); border-color: var(--border); }
+  .toolbar input[type="checkbox"] {
+    accent-color: var(--imperial-gold);
+    cursor: pointer;
+  }
+
+  main {
+    padding: 18px 22px 60px;
+    overflow: auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 240px repeat(4, 1fr);
+    gap: 8px;
+    min-width: 920px;
+  }
+  .grid .col-head {
+    position: sticky;
+    top: 64px;
+    z-index: 10;
+    padding: 12px 14px;
+    font-family: "Orbitron", sans-serif;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-size: 12px;
+    border: 1px solid var(--border-bright);
+    background: var(--panel);
+    text-align: center;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    text-shadow: 0 1px 0 rgba(0,0,0,0.4);
+  }
+  .grid .col-head.default {
+    background: linear-gradient(135deg, var(--t-default-2), var(--t-default-1));
+    color: #f1f3fb;
+  }
+  .grid .col-head.gold {
+    background: linear-gradient(135deg, #4a3500 0%, #8a6200 60%, #b58200 100%);
+    color: #fff4c2;
+    border-color: var(--imperial-gold);
+    box-shadow: 0 0 18px rgba(255, 204, 0, 0.25), inset 0 0 16px rgba(255, 204, 0, 0.12);
+  }
+  .grid .col-head.diamond {
+    background: linear-gradient(135deg, #07344a 0%, #0e587b 60%, #1d83b0 100%);
+    color: #d8f6ff;
+    border-color: var(--hologram);
+    box-shadow: 0 0 18px rgba(106, 215, 255, 0.25), inset 0 0 16px rgba(106, 215, 255, 0.12);
+  }
+  .grid .col-head.rainbow {
+    background: linear-gradient(90deg, var(--t-rainbow-1), var(--t-rainbow-2), var(--t-rainbow-3), var(--t-rainbow-4), var(--t-rainbow-5));
+    color: #0a0e1a;
+    border-color: transparent;
+    box-shadow: 0 0 22px rgba(176, 124, 255, 0.25);
+  }
+
+  .grid .row-head {
+    padding: 12px 14px;
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--border-bright);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    justify-content: center;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    position: relative;
+    overflow: hidden;
+  }
+  /* left rarity stripe */
+  .grid .row-head::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--rarity-color, var(--muted));
+    box-shadow: 0 0 12px var(--rarity-color, transparent);
+  }
+  .grid .row-head .name {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+  .grid .row-head .meta {
+    font-size: 10px;
+    color: var(--rarity-color, var(--muted));
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    font-weight: 600;
+  }
+  .grid .row-head.highlight {
+    outline: 2px solid var(--imperial-gold);
+    outline-offset: 1px;
+  }
+
+  .cell {
+    padding: 11px 13px;
+    border: 1px solid var(--border-bright);
+    background: var(--panel-2);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 104px;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .cell .income {
+    font-family: "Orbitron", sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--imperial-gold-soft);
+    text-shadow: 0 0 10px rgba(255, 204, 0, 0.25);
+  }
+  .cell .income .unit {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-left: 6px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    text-shadow: none;
+  }
+  .cell .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    font-weight: 600;
+  }
+  .cell .chip b { color: var(--hologram); font-weight: 700; text-shadow: 0 0 8px rgba(106, 215, 255, 0.3); }
+  .cell .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+  }
+  .cell button.toggle {
+    appearance: none;
+    border: 1px solid var(--border-bright);
+    background: var(--panel);
+    color: var(--text);
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: "Orbitron", sans-serif;
+    transition: all 0.15s;
+  }
+  .cell button.toggle:hover { border-color: var(--imperial-gold); color: var(--imperial-gold-soft); }
+
+  /* Incomplete cells — VIVID so they stand out as the ones to work on */
+  .cell.default-cell:not(.done) {
+    background: linear-gradient(180deg, rgba(160, 170, 195, 0.18), transparent 70%), var(--panel-2);
+    border-color: rgba(160, 170, 195, 0.45);
+    box-shadow: 0 0 14px rgba(160, 170, 195, 0.12);
+  }
+  .cell.gold-cell:not(.done) {
+    background: linear-gradient(180deg, rgba(255, 204, 0, 0.22), transparent 65%), var(--panel-2);
+    border-color: rgba(255, 204, 0, 0.6);
+    box-shadow: 0 0 18px rgba(255, 204, 0, 0.22), inset 0 0 20px rgba(255, 204, 0, 0.06);
+  }
+  .cell.diamond-cell:not(.done) {
+    background: linear-gradient(180deg, rgba(106, 215, 255, 0.22), transparent 65%), var(--panel-2);
+    border-color: rgba(106, 215, 255, 0.6);
+    box-shadow: 0 0 18px rgba(106, 215, 255, 0.22), inset 0 0 20px rgba(106, 215, 255, 0.06);
+  }
+  .cell.rainbow-cell:not(.done) {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent 70%),
+      conic-gradient(from 220deg at 100% 0%,
+        rgba(255,94,122,0.28), rgba(255,181,71,0.28),
+        rgba(111,224,122,0.28), rgba(95,183,255,0.28),
+        rgba(176,124,255,0.28), rgba(255,94,122,0.28)),
+      var(--panel-2);
+    border-color: rgba(176, 124, 255, 0.65);
+    box-shadow: 0 0 20px rgba(176, 124, 255, 0.22);
+  }
+
+  /* Completed cells — DIM AND DARK so they recede */
+  .cell.done {
+    background: #07090f;
+    border-color: #14182a;
+    box-shadow: none;
+    opacity: 0.45;
+  }
+  .cell.done:hover { opacity: 0.85; }
+  .cell.done .income {
+    color: #4a5066;
+    text-shadow: none;
+    font-weight: 500;
+  }
+  .cell.done .income .unit { color: #3a4055; }
+  .cell.done .chip { color: #3e4459; }
+  .cell.done .chip b { color: #525a73; text-shadow: none; }
+  .cell.done button.toggle {
+    background: transparent;
+    color: #4a5066;
+    border-color: #1a1f30;
+    box-shadow: none;
+  }
+  .cell.done button.toggle:hover { color: var(--hologram); border-color: var(--hologram); }
+
+  .cell.tbc .income { color: var(--muted); font-style: italic; text-shadow: none; }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 11px;
+    margin: 4px 0 16px;
+    padding: 12px 14px;
+    background: linear-gradient(180deg, rgba(13, 20, 38, 0.5), rgba(13, 20, 38, 0.2));
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--imperial-gold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+  .legend .key {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .legend .key b { color: var(--imperial-gold-soft); font-weight: 700; }
+  .legend .swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    border: 1px solid var(--border-bright);
+  }
+  .legend .swatch.default { background: linear-gradient(135deg, var(--t-default-2), var(--t-default-1)); }
+  .legend .swatch.gold { background: linear-gradient(135deg, #4a3500, #8a6200); box-shadow: 0 0 6px rgba(255, 204, 0, 0.4); }
+  .legend .swatch.diamond { background: linear-gradient(135deg, #07344a, #0e587b); box-shadow: 0 0 6px rgba(106, 215, 255, 0.4); }
+  .legend .swatch.rainbow { background: linear-gradient(90deg, var(--t-rainbow-1), var(--t-rainbow-2), var(--t-rainbow-3), var(--t-rainbow-4), var(--t-rainbow-5)); }
+
+  footer {
+    color: var(--muted);
+    font-size: 10px;
+    text-align: center;
+    padding: 28px 12px 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    font-family: "Orbitron", sans-serif;
+    font-weight: 500;
+  }
+  footer::before, footer::after {
+    content: "◆";
+    color: var(--imperial-gold);
+    opacity: 0.4;
+    margin: 0 10px;
+  }
+
+  /* ---------- COMPACT MODE ---------- */
+  .compact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .compact-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 14px 9px 18px;
+    background: linear-gradient(90deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--border);
+    position: relative;
+    transition: border-color 0.15s, background 0.15s;
+    overflow: hidden;
+  }
+  .compact-row::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--rarity-color, var(--muted));
+    box-shadow: 0 0 10px var(--rarity-color, transparent);
+  }
+  .compact-row:hover {
+    border-color: var(--border-bright);
+    background: linear-gradient(90deg, var(--panel-3), var(--panel-2));
+  }
+  .compact-row .name-block {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    min-width: 0;
+  }
+  .compact-row .name {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    font-size: 13px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .compact-row .meta {
+    font-size: 9px;
+    color: var(--rarity-color, var(--muted));
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    font-weight: 600;
+  }
+  .compact-row .pills {
+    display: inline-flex;
+    gap: 6px;
+    flex-wrap: nowrap;
+  }
+  .tier-pill {
+    appearance: none;
+    border: 1px solid var(--border-bright);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 3px;
+    padding: 5px 12px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    line-height: 1;
+    min-width: 72px;
+    text-align: center;
+    font-family: "Orbitron", sans-serif;
+    transition: all 0.15s;
+  }
+  .tier-pill:hover { border-color: var(--text); color: var(--text); }
+  .tier-pill.done.default {
+    background: linear-gradient(135deg, var(--t-default-2), var(--t-default-1));
+    color: #f1f3fb;
+    border-color: var(--t-default-1);
+  }
+  .tier-pill.done.gold {
+    background: linear-gradient(135deg, #4a3500, #8a6200);
+    color: #fff4c2;
+    border-color: var(--imperial-gold);
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+  }
+  .tier-pill.done.diamond {
+    background: linear-gradient(135deg, #07344a, #0e587b);
+    color: #d8f6ff;
+    border-color: var(--hologram);
+    box-shadow: 0 0 10px rgba(106, 215, 255, 0.4);
+  }
+  .tier-pill.done.rainbow {
+    background: linear-gradient(90deg, var(--t-rainbow-1), var(--t-rainbow-2), var(--t-rainbow-3), var(--t-rainbow-4), var(--t-rainbow-5));
+    color: #0a0e1a;
+    border-color: transparent;
+    box-shadow: 0 0 12px rgba(176, 124, 255, 0.35);
+  }
+  .tier-pill.tbc {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 600px) {
+    .compact-row { grid-template-columns: 1fr; }
+    .compact-row .pills { justify-content: flex-start; }
+  }
+
+  @media (max-width: 900px) {
+    .grid { min-width: 720px; }
+    main { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>
+    <span class="badge"></span>
+    Droidex <span class="accent">Tracker</span>
+  </h1>
+  <div class="toolbar">
+    <input id="search" type="search" placeholder="Search droid..." />
+    <select id="rarity-filter">
+      <option value="">All Rarities</option>
+      <option>Common</option>
+      <option>Rare</option>
+      <option>Epic</option>
+      <option>Legendary</option>
+      <option>Mythic</option>
+    </select>
+    <select id="sort-by" title="Sort order">
+      <option value="name-asc">Sort: Name A→Z</option>
+      <option value="name-desc">Sort: Name Z→A</option>
+      <option value="rarity-asc">Sort: Rarity (low→high)</option>
+      <option value="rarity-desc">Sort: Rarity (high→low)</option>
+    </select>
+    <label><input type="checkbox" id="only-incomplete" checked /> Only droids I still need</label>
+    <label><input type="checkbox" id="compact" /> Compact</label>
+    <button id="reset" class="danger" title="Reset all completion state">Reset</button>
+  </div>
+  <div class="stats">
+    <div class="stat">Default <b id="stat-default">0/0</b></div>
+    <div class="stat">Gold <b id="stat-gold">0/0</b></div>
+    <div class="stat">Diamond <b id="stat-diamond">0/0</b></div>
+    <div class="stat">Rainbow <b id="stat-rainbow">0/0</b></div>
+    <div class="stat">Total <b id="stat-total">0/0</b></div>
+  </div>
+</header>
+
+<main>
+    <div class="legend">
+      <span class="key"><span class="swatch default"></span>Default — buy blueprint at Sandcrawler</span>
+      <span class="key"><span class="swatch gold"></span>Gold — 2× base income</span>
+      <span class="key"><span class="swatch diamond"></span>Diamond — 4× base income</span>
+      <span class="key"><span class="swatch rainbow"></span>Rainbow — 8× base income</span>
+      <span class="key"><b>income/s</b> is what the droid generates · <b>chips</b> are upgrade chips needed for that tier.</span>
+    </div>
+
+    <div class="grid" id="grid">
+      <div class="col-head"></div>
+      <div class="col-head default">Default</div>
+      <div class="col-head gold">Gold</div>
+      <div class="col-head diamond">Diamond</div>
+      <div class="col-head rainbow">Rainbow</div>
+    </div>
+
+    <div class="compact-list" id="compact-list" hidden></div>
+
+    <footer>
+      Transmission Logged · Imperial Senate Archives · Mythic Data: Classified
+    </footer>
+  </main>
+
+<script>
+  // ---------- DATA ----------
+  // income tuple: [base, gold, diamond, rainbow] in credits/sec
+  const DROIDS = [
+    { name: "MOUSE",          type: "Worker",    rarity: "Common",    income: [2, 4, 8, 16] },
+    { name: "PIT",            type: "Worker",    rarity: "Common",    income: [2, 4, 8, 16] },
+    { name: "GONK",           type: "Worker",    rarity: "Common",    income: [4, 8, 16, 32] },
+    { name: "CB",             type: "Astromech", rarity: "Common",    income: [3, 6, 12, 24] },
+    { name: "R3",             type: "Astromech", rarity: "Common",    income: [3, 6, 12, 24] },
+    { name: "R5",             type: "Astromech", rarity: "Common",    income: [3, 6, 12, 24] },
+    { name: "R8",             type: "Astromech", rarity: "Common",    income: [4, 8, 16, 32] },
+    { name: "IMPERIAL PROBE", type: "Battle",    rarity: "Common",    income: [6, 12, 24, 48] },
+    { name: "B1 BATTLE",      type: "Battle",    rarity: "Common",    income: [5, 10, 20, 40] },
+    { name: "DRK-1 PROBE",    type: "Battle",    rarity: "Common",    income: [3, 6, 12, 24] },
+    { name: "ID10",           type: "Battle",    rarity: "Common",    income: [4, 8, 16, 32] },
+
+    { name: "BDX EXPLORER",   type: "Worker",    rarity: "Rare",      income: [15, 30, 60, 120] },
+    { name: "ARG",            type: "Worker",    rarity: "Rare",      income: [42, 84, 168, 336] },
+    { name: "SENATE HOVERCAM",type: "Worker",    rarity: "Rare",      income: [46, 92, 184, 368] },
+    { name: "BU-4D",          type: "Worker",    rarity: "Rare",      income: [58, 116, 232, 464] },
+    { name: "BAL-CORE",       type: "Worker",    rarity: "Rare",      income: [23, 46, 92, 184] },
+    { name: "ROLL-R",         type: "Worker",    rarity: "Rare",      income: [31, 62, 124, 248] },
+    { name: "2BB",            type: "Astromech", rarity: "Rare",      income: [17, 34, 68, 136] },
+    { name: "A-LT",           type: "Astromech", rarity: "Rare",      income: [36, 72, 144, 288] },
+    { name: "R4",             type: "Astromech", rarity: "Rare",      income: [50, 100, 200, 400] },
+    { name: "R9",             type: "Astromech", rarity: "Rare",      income: [54, 108, 216, 432] },
+    { name: "B1 SECURITY",    type: "Battle",    rarity: "Rare",      income: [66, 132, 264, 528] },
+    { name: "NAV-EX",         type: "Battle",    rarity: "Rare",      income: [18, 36, 72, 144] },
+    { name: "VECT-ARM",       type: "Battle",    rarity: "Rare",      income: [27, 54, 108, 216] },
+    { name: "HOV-R",          type: "Battle",    rarity: "Rare",      income: [62, 124, 248, 496] },
+
+    { name: "GROUNDMECH",     type: "Worker",    rarity: "Epic",      income: [120, 240, 480, 960] },
+    { name: "LO",             type: "Worker",    rarity: "Epic",      income: [240, 480, 960, 1920] },
+    { name: "AMP WALKER",     type: "Worker",    rarity: "Epic",      income: [570, 1140, 2280, 4560] },
+    { name: "SEN-TRI",        type: "Worker",    rarity: "Epic",      income: [510, 1020, 2040, 4080] },
+    { name: "OPTI-POD",       type: "Worker",    rarity: "Epic",      income: [380, 780, 1560, 3120] },
+    { name: "BB",             type: "Astromech", rarity: "Epic",      income: [150, 300, 600, 1200] },
+    { name: "R2",             type: "Astromech", rarity: "Epic",      income: [360, 720, 1440, 2880] },
+    { name: "R6",             type: "Astromech", rarity: "Epic",      income: [300, 600, 1200, 2400] },
+    { name: "TRAK-R",         type: "Astromech", rarity: "Epic",      income: [330, 660, 1320, 2640] },
+    { name: "ORB-WALKER",     type: "Astromech", rarity: "Epic",      income: [180, 360, 720, 1440] },
+    { name: "UTIL-TEC",       type: "Astromech", rarity: "Epic",      income: [210, 420, 840, 1680] },
+    { name: "B1 HEAVY",       type: "Battle",    rarity: "Epic",      income: [630, 1260, 2520, 5040] },
+    { name: "B2-SUPER",       type: "Battle",    rarity: "Epic",      income: [420, 840, 1680, 3360] },
+    { name: "B2-HEAVY",       type: "Battle",    rarity: "Epic",      income: [480, 960, 1920, 3840] },
+    { name: "STRIKE-ORB",     type: "Battle",    rarity: "Epic",      income: [540, 1080, 2160, 4320] },
+    { name: "HAUL-R",         type: "Battle",    rarity: "Epic",      income: [270, 540, 1080, 2160] },
+    { name: "LNG-SHOT",       type: "Battle",    rarity: "Epic",      income: [450, 900, 1800, 3600] },
+    { name: "PROTO-ROLLER",   type: "Battle",    rarity: "Epic",      income: [972, 1944, 3888, 7776] },
+
+    { name: "MECHA-DROID",    type: "Worker",    rarity: "Legendary", income: [1040, 2080, 4160, 8320] },
+    { name: "MONO-WLKR",      type: "Worker",    rarity: "Legendary", income: [1120, 2230, 4460, 8920] },
+    { name: "BB9",            type: "Astromech", rarity: "Legendary", income: [900, 1800, 3600, 7200] },
+    { name: "R7",             type: "Astromech", rarity: "Legendary", income: [1190, 2380, 4750, 9500] },
+    { name: "B2-RP",          type: "Battle",    rarity: "Legendary", income: [1400, 2800, 5600, 11200] },
+    { name: "CYCLO-GRAV",     type: "Battle",    rarity: "Legendary", income: [1260, 2520, 5040, 10080] },
+    { name: "OPTI-STRK",      type: "Battle",    rarity: "Legendary", income: [1510, 3020, 6040, 12080] },
+
+    { name: "BB-8",           type: "Astromech", rarity: "Mythic",    income: [null, null, null, null] },
+    { name: "MISTER BONES",   type: "Battle",    rarity: "Mythic",    income: [null, null, null, null] },
+  ];
+
+  // upgrade-chip cost to REACH that tier (per droid rarity)
+  const UPGRADE_COSTS = {
+    Common:    { Default: 0, Gold: 5,   Diamond: 10,   Rainbow: 15   },
+    Rare:      { Default: 0, Gold: 30,  Diamond: 50,   Rainbow: 75   },
+    Epic:      { Default: 0, Gold: 120, Diamond: 180,  Rainbow: 240  },
+    Legendary: { Default: 0, Gold: 400, Diamond: 1200, Rainbow: 4000 },
+    Mythic:    { Default: 0, Gold: null,Diamond: null, Rainbow: null },
+  };
+
+  const TIERS = ["Default", "Gold", "Diamond", "Rainbow"];
+  const TIER_KEY = { Default: "default", Gold: "gold", Diamond: "diamond", Rainbow: "rainbow" };
+
+  // What the user STILL needs (everything else is pre-marked complete).
+  const REMAINING = {
+    Default: ["TRAK-R", "BB-8", "MISTER BONES"],
+    Gold:    ["R5", "ROLL-R", "2BB", "R4", "NAV-EX", "OPTI-POD", "R2", "TRAK-R",
+              "B2-SUPER", "B2-HEAVY", "LNG-SHOT", "BB9", "B2-RP", "CYCLO-GRAV", "OPTI-STRK"],
+    Diamond: ["R8", "B1 BATTLE", "BAL-CORE", "R4", "NAV-EX", "VECT-ARM", "OPTI-POD",
+              "BB", "R2", "B2-SUPER", "STRIKE-ORB", "LNG-SHOT", "PROTO-ROLLER",
+              "MECHA-DROID", "MONO-WLKR", "BB9", "R7", "B2-RP", "CYCLO-GRAV", "OPTI-STRK"],
+    Rainbow: ["R5", "R8", "IMPERIAL PROBE", "ARG", "2BB", "VECT-ARM", "OPTI-POD",
+              "TRAK-R", "B2-HEAVY", "STRIKE-ORB", "LNG-SHOT", "PROTO-ROLLER",
+              "MECHA-DROID", "MONO-WLKR", "BB9", "R7", "B2-RP", "CYCLO-GRAV", "OPTI-STRK"],
+  };
+
+  // ---------- STATE ----------
+  const STORAGE_KEY = "droidex.completed.v1";
+  const COMPACT_KEY = "droidex.compact.v1";
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) {}
+    // first-run: mark everything completed EXCEPT the remaining list above
+    const state = {};
+    for (const d of DROIDS) {
+      for (const tier of TIERS) {
+        const needs = REMAINING[tier].includes(d.name);
+        // Skip auto-completing Mythic tiers since their upgrade path isn't released
+        if (d.rarity === "Mythic") {
+          state[`${d.name}|${tier}`] = false;
+        } else {
+          state[`${d.name}|${tier}`] = !needs;
+        }
+      }
+    }
+    return state;
+  }
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  let state = loadState();
+  let compact = localStorage.getItem(COMPACT_KEY) === "1";
+  let filter = { q: "", rarity: "", onlyIncomplete: true, sort: "name-asc" };
+
+  const RARITY_ORDER = { Common: 0, Rare: 1, Epic: 2, Legendary: 3, Mythic: 4 };
+  const RARITY_COLOR = {
+    Common:    "var(--r-common)",
+    Rare:      "var(--r-rare)",
+    Epic:      "var(--r-epic)",
+    Legendary: "var(--r-legendary)",
+    Mythic:    "var(--r-mythic)",
+  };
+
+  // ---------- HELPERS ----------
+  function fmt(n) {
+    if (n == null) return "TBC";
+    if (n >= 1000) return (n / 1000).toFixed(n % 1000 === 0 ? 0 : 2).replace(/\.?0+$/, "") + "k";
+    return String(n);
+  }
+  function fmtChips(n) { return n == null ? "TBC" : n.toLocaleString(); }
+
+  function filteredDroids() {
+    const out = DROIDS.filter((d) => {
+      if (filter.rarity && d.rarity !== filter.rarity) return false;
+      if (filter.q && !d.name.toLowerCase().includes(filter.q.toLowerCase())) return false;
+      if (filter.onlyIncomplete) {
+        const anyIncomplete = TIERS.some((t) => !state[`${d.name}|${t}`]);
+        if (!anyIncomplete) return false;
+      }
+      return true;
+    });
+
+    const byName = (a, b) => a.name.localeCompare(b.name);
+    const byRarity = (a, b) => {
+      const diff = RARITY_ORDER[a.rarity] - RARITY_ORDER[b.rarity];
+      return diff !== 0 ? diff : byName(a, b);
+    };
+
+    switch (filter.sort) {
+      case "name-desc":   out.sort((a, b) => byName(b, a)); break;
+      case "rarity-asc":  out.sort(byRarity); break;
+      case "rarity-desc": out.sort((a, b) => byRarity(b, a)); break;
+      case "name-asc":
+      default:            out.sort(byName); break;
+    }
+    return out;
+  }
+
+  function tierIncomeIndex(tier) {
+    return { Default: 0, Gold: 1, Diamond: 2, Rainbow: 3 }[tier];
+  }
+
+  // ---------- RENDER ----------
+  function renderGrid() {
+    const grid = document.getElementById("grid");
+    // strip everything after the 5 header cells
+    while (grid.children.length > 5) grid.removeChild(grid.lastChild);
+
+    const droids = filteredDroids();
+    for (const d of droids) {
+      const head = document.createElement("div");
+      head.className = "row-head";
+      head.dataset.name = d.name;
+      head.style.setProperty("--rarity-color", RARITY_COLOR[d.rarity]);
+      head.innerHTML = `
+        <div class="name">${d.name}</div>
+        <div class="meta">${d.rarity} · ${d.type}</div>
+      `;
+      grid.appendChild(head);
+
+      for (const tier of TIERS) {
+        const cell = document.createElement("div");
+        const tierKey = TIER_KEY[tier];
+        const done = state[`${d.name}|${tier}`];
+        cell.className = `cell ${tierKey}-cell ${done ? "done" : ""}`;
+        const income = d.income[tierIncomeIndex(tier)];
+        const isMythicUnknown = d.rarity === "Mythic" && income == null;
+        if (isMythicUnknown) cell.classList.add("tbc");
+
+        const chipCost = UPGRADE_COSTS[d.rarity][tier];
+        let chipLine = "";
+        if (tier === "Default") {
+          chipLine = `<span class="chip">From <b>Sandcrawler</b> · no chips</span>`;
+        } else if (chipCost == null) {
+          chipLine = `<span class="chip">Upgrade chips: <b>TBC</b></span>`;
+        } else {
+          chipLine = `<span class="chip">Upgrade chips: <b>${fmtChips(chipCost)}</b></span>`;
+        }
+
+        cell.innerHTML = `
+          <div>
+            <div class="income">${fmt(income)}<span class="unit">credits/s</span></div>
+            ${chipLine}
+          </div>
+          <div class="row">
+            <span class="chip" style="opacity:.7">${tier}</span>
+            <button class="toggle" data-name="${d.name}" data-tier="${tier}">
+              ${done ? "✓ Built" : "Mark built"}
+            </button>
+          </div>
+        `;
+        grid.appendChild(cell);
+      }
+    }
+
+    grid.querySelectorAll("button.toggle").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const key = `${btn.dataset.name}|${btn.dataset.tier}`;
+        state[key] = !state[key];
+        saveState();
+        renderAll();
+      });
+    });
+  }
+
+  function renderStats() {
+    const counts = { Default: [0, 0], Gold: [0, 0], Diamond: [0, 0], Rainbow: [0, 0], total: [0, 0] };
+    for (const d of DROIDS) {
+      for (const t of TIERS) {
+        counts[t][1] += 1;
+        counts.total[1] += 1;
+        if (state[`${d.name}|${t}`]) {
+          counts[t][0] += 1;
+          counts.total[0] += 1;
+        }
+      }
+    }
+    document.getElementById("stat-default").textContent = `${counts.Default[0]}/${counts.Default[1]}`;
+    document.getElementById("stat-gold").textContent = `${counts.Gold[0]}/${counts.Gold[1]}`;
+    document.getElementById("stat-diamond").textContent = `${counts.Diamond[0]}/${counts.Diamond[1]}`;
+    document.getElementById("stat-rainbow").textContent = `${counts.Rainbow[0]}/${counts.Rainbow[1]}`;
+    document.getElementById("stat-total").textContent = `${counts.total[0]}/${counts.total[1]}`;
+  }
+
+  function renderCompact() {
+    const list = document.getElementById("compact-list");
+    list.innerHTML = "";
+    const droids = filteredDroids();
+    for (const d of droids) {
+      const row = document.createElement("div");
+      row.className = "compact-row";
+      row.style.setProperty("--rarity-color", RARITY_COLOR[d.rarity]);
+      const pillsHtml = TIERS.map((t) => {
+        const done = state[`${d.name}|${t}`];
+        const isTbc = d.rarity === "Mythic";
+        return `<button
+          class="tier-pill ${done ? "done " + TIER_KEY[t] : ""} ${isTbc ? "tbc" : ""}"
+          data-name="${d.name}"
+          data-tier="${t}"
+          title="${t}${isTbc ? " (TBC)" : ""}"
+        >${t}</button>`;
+      }).join("");
+      row.innerHTML = `
+        <div class="name-block">
+          <span class="name">${d.name}</span>
+          <span class="meta">${d.rarity} · ${d.type}</span>
+        </div>
+        <div class="pills">${pillsHtml}</div>
+      `;
+      list.appendChild(row);
+    }
+    list.querySelectorAll("button.tier-pill").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const key = `${btn.dataset.name}|${btn.dataset.tier}`;
+        state[key] = !state[key];
+        saveState();
+        renderAll();
+      });
+    });
+  }
+
+  function applyCompactVisibility() {
+    document.getElementById("grid").hidden = compact;
+    document.getElementById("compact-list").hidden = !compact;
+  }
+
+  function renderAll() {
+    applyCompactVisibility();
+    if (compact) renderCompact();
+    else renderGrid();
+    renderStats();
+  }
+
+  // ---------- WIRE UP ----------
+  document.getElementById("search").addEventListener("input", (e) => {
+    filter.q = e.target.value;
+    renderAll();
+  });
+  document.getElementById("rarity-filter").addEventListener("change", (e) => {
+    filter.rarity = e.target.value;
+    renderAll();
+  });
+  document.getElementById("sort-by").addEventListener("change", (e) => {
+    filter.sort = e.target.value;
+    renderAll();
+  });
+  document.getElementById("only-incomplete").addEventListener("change", (e) => {
+    filter.onlyIncomplete = e.target.checked;
+    renderAll();
+  });
+  const compactCheckbox = document.getElementById("compact");
+  compactCheckbox.checked = compact;
+  compactCheckbox.addEventListener("change", (e) => {
+    compact = e.target.checked;
+    localStorage.setItem(COMPACT_KEY, compact ? "1" : "0");
+    renderAll();
+  });
+  document.getElementById("reset").addEventListener("click", () => {
+    if (!confirm("Reset all progress to the initial 'remaining' list?")) return;
+    localStorage.removeItem(STORAGE_KEY);
+    state = loadState();
+    saveState();
+    renderAll();
+  });
+
+  renderAll();
+</script>
+</body>
+</html>
