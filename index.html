@@ -939,7 +939,10 @@
         const key = `${btn.dataset.name}|${btn.dataset.tier}`;
         state[key] = !state[key];
         saveState();
-        renderAll();
+        const cell = btn.closest(".cell");
+        if (cell) cell.classList.toggle("done", state[key]);
+        btn.textContent = state[key] ? "✓ Built" : "Mark built";
+        renderStats();
       });
     });
   }
@@ -995,7 +998,13 @@
         const key = `${btn.dataset.name}|${btn.dataset.tier}`;
         state[key] = !state[key];
         saveState();
-        renderAll();
+        const tierClass = TIER_KEY[btn.dataset.tier];
+        if (state[key]) {
+          btn.classList.add("done", tierClass);
+        } else {
+          btn.classList.remove("done", tierClass);
+        }
+        renderStats();
       });
     });
   }
