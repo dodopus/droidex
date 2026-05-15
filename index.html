@@ -52,6 +52,7 @@
 
 
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   html, body { height: 100%; }
   body {
     margin: 0;
@@ -269,7 +270,7 @@
   }
   .grid .col-head {
     position: sticky;
-    top: 64px;
+    top: 104px;
     z-index: 10;
     padding: 12px 14px;
     font-family: "Orbitron", sans-serif;
@@ -541,6 +542,199 @@
     margin: 0 10px;
   }
 
+  /* ---------- TABS ---------- */
+  .tabs {
+    position: sticky;
+    top: 64px;
+    z-index: 20;
+    display: flex;
+    gap: 4px;
+    padding: 0 22px;
+    background: linear-gradient(180deg, rgba(5, 8, 16, 0.92) 0%, rgba(5, 8, 16, 0.65) 100%);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+  }
+  .tab {
+    appearance: none;
+    background: transparent;
+    border: 1px solid transparent;
+    border-bottom: none;
+    color: var(--muted);
+    font-family: "Orbitron", sans-serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    padding: 11px 20px 10px;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+    position: relative;
+    top: 1px;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    background: var(--panel-2);
+    border-color: var(--border-bright);
+    color: var(--imperial-gold);
+    text-shadow: 0 0 8px rgba(255, 214, 10, 0.45);
+  }
+  .tab.active::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -1px; height: 2px;
+    background: var(--panel-2);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Hide Droidex-only controls when Rebirth tab is active */
+  body.tab-rebirth .tab-droidex-only { display: none !important; }
+
+  /* ---------- REBIRTH PANEL (static info) ---------- */
+  .reb-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .reb-level {
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 18px;
+    align-items: center;
+    clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+    position: relative;
+  }
+  .reb-level::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--imperial-gold);
+    opacity: 0.55;
+    box-shadow: 0 0 10px rgba(255, 214, 10, 0.4);
+  }
+  .reb-level-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .reb-level-num {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 2.4px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .reb-level-num .lvl {
+    color: var(--text);
+    font-size: 22px;
+    margin-left: 6px;
+    letter-spacing: 1px;
+  }
+  .reb-level-cost {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 700;
+    color: var(--imperial-gold);
+    text-shadow: 0 0 10px rgba(255, 214, 10, 0.35);
+    font-size: 18px;
+    letter-spacing: 1.4px;
+    line-height: 1.1;
+  }
+  .reb-level-cost .unit {
+    font-size: 9px;
+    color: var(--muted);
+    margin-left: 6px;
+    text-shadow: none;
+    letter-spacing: 1.4px;
+  }
+  .reb-reqs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  @media (max-width: 720px) {
+    .reb-level { grid-template-columns: 1fr; }
+    .reb-reqs { grid-template-columns: 1fr; }
+  }
+
+  .reb-req {
+    background: var(--panel-2);
+    border: 1px solid var(--border-bright);
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  }
+  .reb-req-name {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .reb-req-tier {
+    display: inline-block;
+    flex-shrink: 0;
+    padding: 3px 9px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    font-family: "Orbitron", sans-serif;
+    text-transform: uppercase;
+    border-radius: 3px;
+    border: 1px solid var(--border-bright);
+  }
+  .reb-req-tier.default {
+    background: linear-gradient(135deg, var(--t-default-2), var(--t-default-1));
+    color: #f4f6fc;
+    border-color: var(--t-default-1);
+  }
+  .reb-req-tier.gold {
+    background: linear-gradient(135deg, #6e5000, #b88600);
+    color: #fff7c8;
+    border-color: var(--imperial-gold);
+    box-shadow: 0 0 8px rgba(255, 214, 10, 0.35);
+  }
+  .reb-req-tier.diamond {
+    background: linear-gradient(135deg, #074a64, #0e80a8);
+    color: #e0fbff;
+    border-color: var(--hologram);
+    box-shadow: 0 0 8px rgba(24, 224, 255, 0.35);
+  }
+  .reb-req-tier.rainbow {
+    background: linear-gradient(90deg,
+      rgba(186, 60, 100, 0.9), rgba(186, 110, 40, 0.9),
+      rgba(60, 150, 80, 0.9),  rgba(60, 120, 180, 0.9),
+      rgba(130, 70, 180, 0.9));
+    color: #fff;
+    border-color: rgba(168, 48, 255, 0.55);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  }
+
+  .reb-intro {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 4px 0 14px;
+    padding: 12px 14px;
+    background: linear-gradient(180deg, rgba(13, 20, 38, 0.5), rgba(13, 20, 38, 0.2));
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--imperial-gold);
+    font-weight: 500;
+  }
+  .reb-intro b { color: var(--imperial-gold-soft); font-weight: 700; }
+
   /* ---------- COMPACT MODE ---------- */
   .compact-list {
     display: flex;
@@ -678,8 +872,8 @@
     Droidex <span class="accent">Tracker</span>
   </h1>
   <div class="toolbar">
-    <input id="search" type="search" placeholder="Search droid..." />
-    <select id="rarity-filter">
+    <input id="search" type="search" placeholder="Search droid..." class="tab-droidex-only" />
+    <select id="rarity-filter" class="tab-droidex-only">
       <option value="">All Rarities</option>
       <option>Common</option>
       <option>Rare</option>
@@ -687,15 +881,15 @@
       <option>Legendary</option>
       <option>Mythic</option>
     </select>
-    <select id="sort-by" title="Sort order">
+    <select id="sort-by" title="Sort order" class="tab-droidex-only">
       <option value="droidex" selected>Sort: Droidex order</option>
       <option value="rarity-asc">Sort: Rarity (low→high)</option>
       <option value="rarity-desc">Sort: Rarity (high→low)</option>
       <option value="name-asc">Sort: Name A→Z</option>
       <option value="name-desc">Sort: Name Z→A</option>
     </select>
-    <label><input type="checkbox" id="only-incomplete" checked /> Only droids I still need</label>
-    <label><input type="checkbox" id="compact" /> Compact</label>
+    <label class="tab-droidex-only"><input type="checkbox" id="only-incomplete" checked /> Only droids I still need</label>
+    <label class="tab-droidex-only"><input type="checkbox" id="compact" /> Compact</label>
     <button id="reset" class="danger" title="Reset all completion state">Reset</button>
   </div>
   <div class="stats">
@@ -707,24 +901,35 @@
   </div>
 </header>
 
+<nav class="tabs">
+  <button class="tab active" data-tab="droidex">Droidex</button>
+  <button class="tab" data-tab="rebirth">Rebirth</button>
+</nav>
+
 <main>
-    <div class="legend">
-      <span class="key"><span class="swatch default"></span>Default — buy blueprint at Sandcrawler</span>
-      <span class="key"><span class="swatch gold"></span>Gold — 2× base income</span>
-      <span class="key"><span class="swatch diamond"></span>Diamond — 4× base income</span>
-      <span class="key"><span class="swatch rainbow"></span>Rainbow — 8× base income</span>
-      <span class="key"><b>income/s</b> is what the droid generates · <b>chips</b> are upgrade chips needed for that tier.</span>
-    </div>
+    <section id="tab-droidex" class="tab-panel active">
+      <div class="legend">
+        <span class="key"><span class="swatch default"></span>Default — buy blueprint at Sandcrawler</span>
+        <span class="key"><span class="swatch gold"></span>Gold — 2× base income</span>
+        <span class="key"><span class="swatch diamond"></span>Diamond — 4× base income</span>
+        <span class="key"><span class="swatch rainbow"></span>Rainbow — 8× base income</span>
+        <span class="key"><b>income/s</b> is what the droid generates · <b>chips</b> are upgrade chips needed for that tier.</span>
+      </div>
 
-    <div class="grid" id="grid">
-      <div class="col-head"></div>
-      <div class="col-head default">Default</div>
-      <div class="col-head gold">Gold</div>
-      <div class="col-head diamond">Diamond</div>
-      <div class="col-head rainbow">Rainbow</div>
-    </div>
+      <div class="grid" id="grid">
+        <div class="col-head"></div>
+        <div class="col-head default">Default</div>
+        <div class="col-head gold">Gold</div>
+        <div class="col-head diamond">Diamond</div>
+        <div class="col-head rainbow">Rainbow</div>
+      </div>
 
-    <div class="compact-list" id="compact-list" hidden></div>
+      <div class="compact-list" id="compact-list" hidden></div>
+    </section>
+
+    <section id="tab-rebirth" class="tab-panel">
+      <div class="reb-list" id="reb-list"></div>
+    </section>
 
     <footer>
       Transmission Logged · Imperial Senate Archives · Mythic Data: Classified
@@ -805,6 +1010,27 @@
   const TIERS = ["Default", "Gold", "Diamond", "Rainbow"];
   const TIER_KEY = { Default: "default", Gold: "gold", Diamond: "diamond", Rainbow: "rainbow" };
 
+  // Rebirth requirements — credits cost + 3 required droids at specific tiers
+  const REBIRTHS = [
+    { level: 1,  credits: 10_000,           reqs: [["CB","Default"],["PIT","Default"],["DRK-1 PROBE","Default"]] },
+    { level: 2,  credits: 150_000,          reqs: [["BDX EXPLORER","Default"],["2BB","Default"],["BAL-CORE","Default"]] },
+    { level: 3,  credits: 975_000,          reqs: [["A-LT","Default"],["BU-4D","Default"],["R9","Gold"]] },
+    { level: 4,  credits: 2_950_000,        reqs: [["ARG","Gold"],["B1 SECURITY","Gold"],["GROUNDMECH","Default"]] },
+    { level: 5,  credits: 5_350_000,        reqs: [["BU-4D","Gold"],["HOV-R","Gold"],["R9","Diamond"]] },
+    { level: 6,  credits: 9_850_000,        reqs: [["GROUNDMECH","Gold"],["ARG","Diamond"],["A-LT","Diamond"]] },
+    { level: 7,  credits: 14_500_000,       reqs: [["BB","Gold"],["B1 SECURITY","Diamond"],["BU-4D","Diamond"]] },
+    { level: 8,  credits: 36_000_000,       reqs: [["UTIL-TEC","Gold"],["LO","Gold"],["HOV-R","Diamond"]] },
+    { level: 9,  credits: 89_000_000,       reqs: [["GROUNDMECH","Rainbow"],["R6","Gold"],["TRAK-R","Gold"]] },
+    { level: 10, credits: 220_000_000,      reqs: [["LO","Rainbow"],["HAUL-R","Rainbow"],["STRIKE-ORB","Gold"]] },
+    { level: 11, credits: 550_000_000,      reqs: [["AMP WALKER","Rainbow"],["B1 HEAVY","Rainbow"],["BB9","Gold"]] },
+    { level: 12, credits: 1_360_000_000,    reqs: [["PROTO-ROLLER","Rainbow"],["MECHA-DROID","Diamond"],["MONO-WLKR","Gold"]] },
+    { level: 13, credits: 3_400_000_000,    reqs: [["R7","Rainbow"],["CYCLO-GRAV","Rainbow"],["B2-RP","Rainbow"]] },
+    { level: 14, credits: 8_450_000_000,    reqs: [["OPTI-STRK","Rainbow"],["MONO-WLKR","Rainbow"],["MECHA-DROID","Rainbow"]] },
+    { level: 15, credits: 21_000_000_000,   reqs: [["R7","Rainbow"],["CYCLO-GRAV","Rainbow"],["B2-RP","Rainbow"]] },
+    { level: 16, credits: 52_000_000_000,   reqs: [["OPTI-STRK","Rainbow"],["MONO-WLKR","Rainbow"],["PROTO-ROLLER","Rainbow"]] },
+    { level: 17, credits: 130_000_000_000,  reqs: [["B2-RP","Rainbow"],["CYCLO-GRAV","Rainbow"],["MECHA-DROID","Rainbow"]] },
+  ];
+
   // ---------- STATE ----------
   const STORAGE_KEY = "droidex.completed.v2";
   const COMPACT_KEY = "droidex.compact.v1";
@@ -848,6 +1074,14 @@
     return String(n);
   }
   function fmtChips(n) { return n == null ? "TBC" : n.toLocaleString(); }
+
+  function fmtCredits(n) {
+    if (n == null) return "";
+    if (n >= 1e9) return (n / 1e9).toFixed(2).replace(/\.?0+$/, "") + "B";
+    if (n >= 1e6) return (n / 1e6).toFixed(2).replace(/\.?0+$/, "") + "M";
+    if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.?0+$/, "") + "K";
+    return String(n);
+  }
 
   function filteredDroids() {
     const out = DROIDS.filter((d) => {
@@ -1014,10 +1248,55 @@
     document.getElementById("compact-list").hidden = !compact;
   }
 
+  function renderRebirth() {
+    const list = document.getElementById("reb-list");
+    list.innerHTML = "";
+    const intro = document.createElement("div");
+    intro.className = "reb-intro";
+    intro.innerHTML = `Each rebirth unlocks higher droid tiers and base slots. To trigger a level you need the credit cost <b>plus</b> the three required droids deployed at the listed tier.`;
+    list.appendChild(intro);
+    for (const rb of REBIRTHS) {
+      const lvl = document.createElement("div");
+      lvl.className = "reb-level";
+      const reqsHtml = rb.reqs.map(([n, t]) => `
+        <div class="reb-req">
+          <span class="reb-req-name">${n}</span>
+          <span class="reb-req-tier ${TIER_KEY[t]}">${t}</span>
+        </div>
+      `).join("");
+      lvl.innerHTML = `
+        <div class="reb-level-header">
+          <div class="reb-level-num">Rebirth<span class="lvl">${rb.level}</span></div>
+          <div class="reb-level-cost">${fmtCredits(rb.credits)}<span class="unit">Credits</span></div>
+        </div>
+        <div class="reb-reqs">${reqsHtml}</div>
+      `;
+      list.appendChild(lvl);
+    }
+  }
+
+  let activeTab = "droidex";
+
+  function applyTabVisibility() {
+    document.body.classList.toggle("tab-rebirth", activeTab === "rebirth");
+    document.body.classList.toggle("tab-droidex", activeTab === "droidex");
+    document.querySelectorAll(".tab-panel").forEach((p) => {
+      p.classList.toggle("active", p.id === `tab-${activeTab}`);
+    });
+    document.querySelectorAll(".tab").forEach((t) => {
+      t.classList.toggle("active", t.dataset.tab === activeTab);
+    });
+  }
+
   function renderAll() {
-    applyCompactVisibility();
-    if (compact) renderCompact();
-    else renderGrid();
+    applyTabVisibility();
+    if (activeTab === "droidex") {
+      applyCompactVisibility();
+      if (compact) renderCompact();
+      else renderGrid();
+    } else if (activeTab === "rebirth") {
+      renderRebirth();
+    }
     renderStats();
   }
 
@@ -1044,6 +1323,15 @@
     compact = e.target.checked;
     localStorage.setItem(COMPACT_KEY, compact ? "1" : "0");
     renderAll();
+  });
+
+  document.querySelectorAll(".tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const next = tab.dataset.tab;
+      if (next === activeTab) return;
+      activeTab = next;
+      renderAll();
+    });
   });
   document.getElementById("reset").addEventListener("click", () => {
     if (!confirm("Clear all collected droids? This sets every tier back to not built.")) return;
