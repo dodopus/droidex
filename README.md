@@ -49,9 +49,22 @@ After pushing to GitHub:
 
 Because it's a single static HTML file, no Jekyll/GitHub Actions setup is needed.
 
-## Pre-seeded state
+## Initial state
 
-On first run the tracker marks everything as **built** _except_ the tiers I personally still needed when I bootstrapped it. To start from a clean slate instead, click **Reset** (it'll re-seed to my initial list, after which you can mark/unmark to suit yourself), or open DevTools and clear `localStorage`.
+On first run **nothing is marked as built** — every droid × tier cell starts empty so you can tick off entries as you collect them at the Sandcrawler. The **Reset** button (top right) clears everything back to that empty state.
+
+## Storage & privacy
+
+This site stores your completion ticks and your compact-mode preference in your browser's `localStorage`. That's not a cookie — it's a separate browser API that:
+
+- never leaves your device,
+- is never sent in HTTP requests,
+- isn't shared with any third party,
+- is strictly functional (it only remembers what _you_ ticked).
+
+Because of that it qualifies as "strictly necessary for the service requested by the user" under the EU ePrivacy Directive / GDPR, so no consent banner is required.
+
+The page does load the Orbitron / Rajdhani fonts from Google Fonts via CDN; if you want the page to be 100% first-party with no external requests, swap the `<link>` tags for self-hosted font files.
 
 ## Data sources
 

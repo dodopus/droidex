@@ -21,34 +21,35 @@
     --muted: #7e8aaa;
 
     /* Star Wars accents */
-    --imperial-gold: #ffcc00;       /* credits gold */
-    --imperial-gold-soft: #ffe06a;
-    --imperial-gold-dim: #6e5a08;
-    --hologram: #6ad7ff;            /* holocron cyan */
-    --hologram-dim: #1e5a78;
-    --rebel-red: #ff3b3b;
-    --danger: #ff5e5e;
+    --imperial-gold: #ffd60a;       /* credits gold */
+    --imperial-gold-soft: #ffea4a;
+    --imperial-gold-dim: #806800;
+    --hologram: #18e0ff;            /* holocron cyan */
+    --hologram-dim: #0a6680;
+    --rebel-red: #ff2848;
+    --danger: #ff4060;
 
     /* Tier colors */
-    --t-default-1: #6b7387;
-    --t-default-2: #2f3645;
-    --t-gold-1: #ffcc00;
-    --t-gold-2: #7a5a00;
-    --t-diamond-1: #79e6ff;
-    --t-diamond-2: #14506a;
-    --t-rainbow-1: #ff5e7a;
-    --t-rainbow-2: #ffb547;
-    --t-rainbow-3: #6fe07a;
-    --t-rainbow-4: #5fb7ff;
-    --t-rainbow-5: #b07cff;
+    --t-default-1: #8590ad;
+    --t-default-2: #353d52;
+    --t-gold-1: #ffd60a;
+    --t-gold-2: #9a7a00;
+    --t-diamond-1: #18e0ff;
+    --t-diamond-2: #0e6688;
+    --t-rainbow-1: #ff2d6c;
+    --t-rainbow-2: #ff9015;
+    --t-rainbow-3: #1eea50;
+    --t-rainbow-4: #1e9aff;
+    --t-rainbow-5: #a830ff;
 
     /* Rarity colors */
-    --r-common: #9aa6c2;
-    --r-rare: #4a9bff;
-    --r-epic: #b865ff;
-    --r-legendary: #ffa01c;
-    --r-mythic: #ff3b6b;
+    --r-common: #b8c2dc;
+    --r-rare: #1e8aff;
+    --r-epic: #c83cff;
+    --r-legendary: #ff8a08;
+    --r-mythic: #ff1656;
   }
+
 
   * { box-sizing: border-box; }
   html, body { height: 100%; }
@@ -119,9 +120,14 @@
   header::after {
     content: "";
     position: absolute;
-    left: 0; right: 0; bottom: -1px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--imperial-gold) 30%, var(--hologram) 70%, transparent);
-    opacity: 0.6;
+    left: 0; right: 0; bottom: -1px; height: 2px;
+    background: linear-gradient(90deg,
+      transparent,
+      var(--t-rainbow-1), var(--t-rainbow-2), var(--t-rainbow-3),
+      var(--t-rainbow-4), var(--t-rainbow-5),
+      transparent);
+    opacity: 0.8;
+    box-shadow: 0 0 14px rgba(168, 48, 255, 0.4);
   }
   header h1 {
     margin: 0;
@@ -282,22 +288,38 @@
     color: #f1f3fb;
   }
   .grid .col-head.gold {
-    background: linear-gradient(135deg, #4a3500 0%, #8a6200 60%, #b58200 100%);
-    color: #fff4c2;
+    background: linear-gradient(135deg, #6e5000 0%, #b88600 55%, #ffd60a 100%);
+    color: #fff7c8;
     border-color: var(--imperial-gold);
-    box-shadow: 0 0 18px rgba(255, 204, 0, 0.25), inset 0 0 16px rgba(255, 204, 0, 0.12);
+    box-shadow: 0 0 22px rgba(255, 214, 10, 0.45), inset 0 0 18px rgba(255, 214, 10, 0.22);
+    text-shadow: 0 0 10px rgba(255, 214, 10, 0.55);
   }
   .grid .col-head.diamond {
-    background: linear-gradient(135deg, #07344a 0%, #0e587b 60%, #1d83b0 100%);
-    color: #d8f6ff;
+    background: linear-gradient(135deg, #074a64 0%, #0e80a8 55%, #18e0ff 100%);
+    color: #e0fbff;
     border-color: var(--hologram);
-    box-shadow: 0 0 18px rgba(106, 215, 255, 0.25), inset 0 0 16px rgba(106, 215, 255, 0.12);
+    box-shadow: 0 0 22px rgba(24, 224, 255, 0.45), inset 0 0 18px rgba(24, 224, 255, 0.22);
+    text-shadow: 0 0 10px rgba(24, 224, 255, 0.55);
   }
   .grid .col-head.rainbow {
-    background: linear-gradient(90deg, var(--t-rainbow-1), var(--t-rainbow-2), var(--t-rainbow-3), var(--t-rainbow-4), var(--t-rainbow-5));
-    color: #0a0e1a;
-    border-color: transparent;
-    box-shadow: 0 0 22px rgba(176, 124, 255, 0.25);
+    background-color: var(--panel-2);
+    background-image:
+      /* radial vignette — keeps middle vivid, fades edges into panel */
+      radial-gradient(ellipse at center, transparent 25%, rgba(6, 10, 22, 0.82) 100%),
+      /* dulled rainbow base */
+      linear-gradient(90deg,
+        rgba(186, 60, 100, 0.65),
+        rgba(186, 110, 40, 0.65),
+        rgba(60, 150, 80, 0.65),
+        rgba(60, 120, 180, 0.65),
+        rgba(130, 70, 180, 0.65));
+    background-size: 100% 100%, 100% 100%;
+    background-repeat: no-repeat, no-repeat;
+    background-position: center, center;
+    color: #ffffff;
+    border-color: rgba(168, 48, 255, 0.55);
+    box-shadow: 0 0 20px rgba(168, 48, 255, 0.3);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
   }
 
   .grid .row-head {
@@ -405,30 +427,35 @@
 
   /* Incomplete cells — VIVID so they stand out as the ones to work on */
   .cell.default-cell:not(.done) {
-    background: linear-gradient(180deg, rgba(160, 170, 195, 0.18), transparent 70%), var(--panel-2);
-    border-color: rgba(160, 170, 195, 0.45);
-    box-shadow: 0 0 14px rgba(160, 170, 195, 0.12);
+    background: linear-gradient(180deg, rgba(184, 194, 220, 0.26), transparent 70%), var(--panel-2);
+    border-color: rgba(184, 194, 220, 0.65);
+    box-shadow: 0 0 16px rgba(184, 194, 220, 0.18);
   }
   .cell.gold-cell:not(.done) {
-    background: linear-gradient(180deg, rgba(255, 204, 0, 0.22), transparent 65%), var(--panel-2);
-    border-color: rgba(255, 204, 0, 0.6);
-    box-shadow: 0 0 18px rgba(255, 204, 0, 0.22), inset 0 0 20px rgba(255, 204, 0, 0.06);
+    background: linear-gradient(180deg, rgba(255, 214, 10, 0.36), transparent 65%), var(--panel-2);
+    border-color: rgba(255, 214, 10, 0.85);
+    box-shadow: 0 0 22px rgba(255, 214, 10, 0.4), inset 0 0 22px rgba(255, 214, 10, 0.14);
   }
   .cell.diamond-cell:not(.done) {
-    background: linear-gradient(180deg, rgba(106, 215, 255, 0.22), transparent 65%), var(--panel-2);
-    border-color: rgba(106, 215, 255, 0.6);
-    box-shadow: 0 0 18px rgba(106, 215, 255, 0.22), inset 0 0 20px rgba(106, 215, 255, 0.06);
+    background: linear-gradient(180deg, rgba(24, 224, 255, 0.36), transparent 65%), var(--panel-2);
+    border-color: rgba(24, 224, 255, 0.85);
+    box-shadow: 0 0 22px rgba(24, 224, 255, 0.4), inset 0 0 22px rgba(24, 224, 255, 0.14);
   }
   .cell.rainbow-cell:not(.done) {
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.07), transparent 70%),
-      conic-gradient(from 220deg at 100% 0%,
-        rgba(255,94,122,0.28), rgba(255,181,71,0.28),
-        rgba(111,224,122,0.28), rgba(95,183,255,0.28),
-        rgba(176,124,255,0.28), rgba(255,94,122,0.28)),
-      var(--panel-2);
-    border-color: rgba(176, 124, 255, 0.65);
-    box-shadow: 0 0 20px rgba(176, 124, 255, 0.22);
+    background-color: var(--panel-2);
+    background-image:
+      radial-gradient(ellipse at center, transparent 20%, rgba(6, 10, 22, 0.85) 100%),
+      linear-gradient(90deg,
+        rgba(186, 60, 100, 0.45),
+        rgba(186, 110, 40, 0.45),
+        rgba(60, 150, 80, 0.45),
+        rgba(60, 120, 180, 0.45),
+        rgba(130, 70, 180, 0.45));
+    background-size: 100% 100%, 100% 100%;
+    background-repeat: no-repeat, no-repeat;
+    background-position: center, center;
+    border-color: rgba(168, 48, 255, 0.55);
+    box-shadow: 0 0 20px rgba(168, 48, 255, 0.22);
   }
 
   /* Completed cells — DIM AND DARK so they recede */
@@ -485,9 +512,17 @@
     border: 1px solid var(--border-bright);
   }
   .legend .swatch.default { background: linear-gradient(135deg, var(--t-default-2), var(--t-default-1)); }
-  .legend .swatch.gold { background: linear-gradient(135deg, #4a3500, #8a6200); box-shadow: 0 0 6px rgba(255, 204, 0, 0.4); }
-  .legend .swatch.diamond { background: linear-gradient(135deg, #07344a, #0e587b); box-shadow: 0 0 6px rgba(106, 215, 255, 0.4); }
-  .legend .swatch.rainbow { background: linear-gradient(90deg, var(--t-rainbow-1), var(--t-rainbow-2), var(--t-rainbow-3), var(--t-rainbow-4), var(--t-rainbow-5)); }
+  .legend .swatch.gold { background: linear-gradient(135deg, #6e5000, #b88600); box-shadow: 0 0 10px rgba(255, 214, 10, 0.6); }
+  .legend .swatch.diamond { background: linear-gradient(135deg, #074a64, #0e80a8); box-shadow: 0 0 10px rgba(24, 224, 255, 0.6); }
+  .legend .swatch.rainbow {
+    background: linear-gradient(90deg,
+      rgba(186, 60, 100, 0.85),
+      rgba(186, 110, 40, 0.85),
+      rgba(60, 150, 80, 0.85),
+      rgba(60, 120, 180, 0.85),
+      rgba(130, 70, 180, 0.85));
+    box-shadow: 0 0 8px rgba(168, 48, 255, 0.35);
+  }
 
   footer {
     color: var(--muted);
@@ -585,26 +620,40 @@
   .tier-pill:hover { border-color: var(--text); color: var(--text); }
   .tier-pill.done.default {
     background: linear-gradient(135deg, var(--t-default-2), var(--t-default-1));
-    color: #f1f3fb;
+    color: #f4f6fc;
     border-color: var(--t-default-1);
   }
   .tier-pill.done.gold {
-    background: linear-gradient(135deg, #4a3500, #8a6200);
-    color: #fff4c2;
+    background: linear-gradient(135deg, #6e5000, #b88600);
+    color: #fff7c8;
     border-color: var(--imperial-gold);
-    box-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+    box-shadow: 0 0 14px rgba(255, 214, 10, 0.6);
+    text-shadow: 0 0 6px rgba(255, 214, 10, 0.7);
   }
   .tier-pill.done.diamond {
-    background: linear-gradient(135deg, #07344a, #0e587b);
-    color: #d8f6ff;
+    background: linear-gradient(135deg, #074a64, #0e80a8);
+    color: #e0fbff;
     border-color: var(--hologram);
-    box-shadow: 0 0 10px rgba(106, 215, 255, 0.4);
+    box-shadow: 0 0 14px rgba(24, 224, 255, 0.6);
+    text-shadow: 0 0 6px rgba(24, 224, 255, 0.7);
   }
   .tier-pill.done.rainbow {
-    background: linear-gradient(90deg, var(--t-rainbow-1), var(--t-rainbow-2), var(--t-rainbow-3), var(--t-rainbow-4), var(--t-rainbow-5));
-    color: #0a0e1a;
-    border-color: transparent;
-    box-shadow: 0 0 12px rgba(176, 124, 255, 0.35);
+    background-color: var(--panel-2);
+    background-image:
+      radial-gradient(ellipse at center, transparent 20%, rgba(6, 10, 22, 0.6) 100%),
+      linear-gradient(90deg,
+        rgba(186, 60, 100, 0.7),
+        rgba(186, 110, 40, 0.7),
+        rgba(60, 150, 80, 0.7),
+        rgba(60, 120, 180, 0.7),
+        rgba(130, 70, 180, 0.7));
+    background-size: 100% 100%, 100% 100%;
+    background-repeat: no-repeat, no-repeat;
+    background-position: center, center;
+    color: #ffffff;
+    border-color: rgba(168, 48, 255, 0.5);
+    box-shadow: 0 0 12px rgba(168, 48, 255, 0.35);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.85);
   }
   .tier-pill.tbc {
     opacity: 0.4;
@@ -639,10 +688,11 @@
       <option>Mythic</option>
     </select>
     <select id="sort-by" title="Sort order">
-      <option value="name-asc">Sort: Name A→Z</option>
-      <option value="name-desc">Sort: Name Z→A</option>
+      <option value="droidex" selected>Sort: Droidex order</option>
       <option value="rarity-asc">Sort: Rarity (low→high)</option>
       <option value="rarity-desc">Sort: Rarity (high→low)</option>
+      <option value="name-asc">Sort: Name A→Z</option>
+      <option value="name-desc">Sort: Name Z→A</option>
     </select>
     <label><input type="checkbox" id="only-incomplete" checked /> Only droids I still need</label>
     <label><input type="checkbox" id="compact" /> Compact</label>
@@ -755,21 +805,8 @@
   const TIERS = ["Default", "Gold", "Diamond", "Rainbow"];
   const TIER_KEY = { Default: "default", Gold: "gold", Diamond: "diamond", Rainbow: "rainbow" };
 
-  // What the user STILL needs (everything else is pre-marked complete).
-  const REMAINING = {
-    Default: ["TRAK-R", "BB-8", "MISTER BONES"],
-    Gold:    ["R5", "ROLL-R", "2BB", "R4", "NAV-EX", "OPTI-POD", "R2", "TRAK-R",
-              "B2-SUPER", "B2-HEAVY", "LNG-SHOT", "BB9", "B2-RP", "CYCLO-GRAV", "OPTI-STRK"],
-    Diamond: ["R8", "B1 BATTLE", "BAL-CORE", "R4", "NAV-EX", "VECT-ARM", "OPTI-POD",
-              "BB", "R2", "B2-SUPER", "STRIKE-ORB", "LNG-SHOT", "PROTO-ROLLER",
-              "MECHA-DROID", "MONO-WLKR", "BB9", "R7", "B2-RP", "CYCLO-GRAV", "OPTI-STRK"],
-    Rainbow: ["R5", "R8", "IMPERIAL PROBE", "ARG", "2BB", "VECT-ARM", "OPTI-POD",
-              "TRAK-R", "B2-HEAVY", "STRIKE-ORB", "LNG-SHOT", "PROTO-ROLLER",
-              "MECHA-DROID", "MONO-WLKR", "BB9", "R7", "B2-RP", "CYCLO-GRAV", "OPTI-STRK"],
-  };
-
   // ---------- STATE ----------
-  const STORAGE_KEY = "droidex.completed.v1";
+  const STORAGE_KEY = "droidex.completed.v2";
   const COMPACT_KEY = "droidex.compact.v1";
 
   function loadState() {
@@ -777,17 +814,11 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) return JSON.parse(raw);
     } catch (e) {}
-    // first-run: mark everything completed EXCEPT the remaining list above
+    // first-run: nothing collected yet; user marks as they go
     const state = {};
     for (const d of DROIDS) {
       for (const tier of TIERS) {
-        const needs = REMAINING[tier].includes(d.name);
-        // Skip auto-completing Mythic tiers since their upgrade path isn't released
-        if (d.rarity === "Mythic") {
-          state[`${d.name}|${tier}`] = false;
-        } else {
-          state[`${d.name}|${tier}`] = !needs;
-        }
+        state[`${d.name}|${tier}`] = false;
       }
     }
     return state;
@@ -799,7 +830,7 @@
 
   let state = loadState();
   let compact = localStorage.getItem(COMPACT_KEY) === "1";
-  let filter = { q: "", rarity: "", onlyIncomplete: true, sort: "name-asc" };
+  let filter = { q: "", rarity: "", onlyIncomplete: true, sort: "droidex" };
 
   const RARITY_ORDER = { Common: 0, Rare: 1, Epic: 2, Legendary: 3, Mythic: 4 };
   const RARITY_COLOR = {
@@ -836,11 +867,12 @@
     };
 
     switch (filter.sort) {
+      case "name-asc":    out.sort(byName); break;
       case "name-desc":   out.sort((a, b) => byName(b, a)); break;
       case "rarity-asc":  out.sort(byRarity); break;
       case "rarity-desc": out.sort((a, b) => byRarity(b, a)); break;
-      case "name-asc":
-      default:            out.sort(byName); break;
+      case "droidex":
+      default:            /* preserve DROIDS[] array order */ break;
     }
     return out;
   }
@@ -1005,7 +1037,7 @@
     renderAll();
   });
   document.getElementById("reset").addEventListener("click", () => {
-    if (!confirm("Reset all progress to the initial 'remaining' list?")) return;
+    if (!confirm("Clear all collected droids? This sets every tier back to not built.")) return;
     localStorage.removeItem(STORAGE_KEY);
     state = loadState();
     saveState();
