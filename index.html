@@ -854,14 +854,148 @@
     cursor: not-allowed;
   }
 
-  @media (max-width: 600px) {
-    .compact-row { grid-template-columns: 1fr; }
-    .compact-row .pills { justify-content: flex-start; }
-  }
-
   @media (max-width: 900px) {
     .grid { min-width: 720px; }
     main { overflow-x: auto; }
+  }
+
+  /* -------------------- MOBILE -------------------- */
+  @media (max-width: 720px) {
+    header {
+      position: relative;
+      padding: 10px 14px;
+      gap: 10px;
+    }
+    header h1 {
+      font-size: 15px;
+      letter-spacing: 3px;
+      width: 100%;
+    }
+    header h1 .accent { letter-spacing: 3px; }
+
+    .toolbar {
+      width: 100%;
+      gap: 6px;
+    }
+    .toolbar input[type="search"] {
+      width: 100%;
+      flex: 1 1 100%;
+      padding: 9px 12px;
+    }
+    .toolbar select {
+      flex: 1 1 calc(50% - 3px);
+      min-width: 0;
+      font-size: 10px;
+      padding: 8px 6px;
+      letter-spacing: 0.8px;
+    }
+    .toolbar label {
+      flex: 1 1 calc(50% - 3px);
+      justify-content: center;
+      padding: 7px 8px;
+      font-size: 9.5px;
+      letter-spacing: 0.8px;
+    }
+    .toolbar button#reset {
+      flex: 1 1 100%;
+      padding: 9px 8px;
+    }
+
+    header .stats {
+      width: 100%;
+      margin-left: 0;
+      gap: 5px;
+      font-size: 9px;
+      letter-spacing: 0.8px;
+    }
+    header .stats .stat {
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 6px 4px;
+      text-align: center;
+      clip-path: none;
+      border-radius: 4px;
+    }
+    header .stats .stat b { margin-left: 3px; }
+
+    .tabs {
+      position: relative;
+      top: auto;
+      padding: 0 10px;
+      overflow-x: auto;
+    }
+    .tab {
+      padding: 9px 14px 8px;
+      font-size: 10px;
+      letter-spacing: 1.2px;
+    }
+
+    main {
+      padding: 14px 12px 60px;
+      overflow-x: visible;
+    }
+
+    .legend {
+      font-size: 10px;
+      gap: 10px;
+      padding: 10px 12px;
+      letter-spacing: 0.7px;
+    }
+    .legend .key { gap: 6px; flex: 1 1 100%; }
+
+    /* Grid is unusable in 5-column form on mobile; JS forces compact mode.
+       Keep these tweaks for the edge case where it's still shown. */
+    .grid { min-width: auto; grid-template-columns: 1fr; }
+    .grid .col-head { display: none; }
+    .grid .row-head { padding: 10px 12px; }
+
+    /* Compact view tweaks */
+    .compact-row {
+      grid-template-columns: 1fr;
+      padding: 9px 12px 10px 14px;
+      gap: 8px;
+    }
+    .compact-row .name-block { gap: 8px; flex-wrap: wrap; }
+    .compact-row .name { font-size: 12px; letter-spacing: 1px; }
+    .compact-row .pills {
+      width: 100%;
+      justify-content: space-between;
+    }
+    .tier-pill {
+      flex: 1;
+      min-width: 0;
+      padding: 6px 4px;
+      font-size: 9.5px;
+      letter-spacing: 1px;
+    }
+
+    /* Rebirth tab */
+    .reb-level {
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 12px 14px;
+    }
+    .reb-level-header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+    }
+    .reb-level-num { font-size: 12px; letter-spacing: 2px; }
+    .reb-level-num .lvl { font-size: 18px; }
+    .reb-level-cost { font-size: 15px; letter-spacing: 1.2px; }
+    .reb-reqs { grid-template-columns: 1fr; gap: 6px; }
+    .reb-req { padding: 9px 11px; }
+    .reb-req-name { font-size: 11px; }
+
+    footer { font-size: 9px; letter-spacing: 1.2px; padding: 20px 12px 12px; }
+  }
+
+  @media (max-width: 380px) {
+    header h1 { font-size: 13px; letter-spacing: 2.4px; }
+    header h1 .badge { width: 6px; height: 6px; }
+    header .stats { font-size: 8.5px; }
+    .toolbar select, .toolbar label { font-size: 9.5px; }
   }
 </style>
 </head>
@@ -1058,6 +1192,10 @@
   let compact = localStorage.getItem(COMPACT_KEY) === "1";
   let filter = { q: "", rarity: "", onlyIncomplete: true, sort: "droidex" };
 
+  const MOBILE_MQ = window.matchMedia("(max-width: 720px)");
+  function isMobile() { return MOBILE_MQ.matches; }
+  function effectiveCompact() { return compact || isMobile(); }
+
   const RARITY_ORDER = { Common: 0, Rare: 1, Epic: 2, Legendary: 3, Mythic: 4 };
   const RARITY_COLOR = {
     Common:    "var(--r-common)",
@@ -1244,8 +1382,12 @@
   }
 
   function applyCompactVisibility() {
-    document.getElementById("grid").hidden = compact;
-    document.getElementById("compact-list").hidden = !compact;
+    const c = effectiveCompact();
+    document.getElementById("grid").hidden = c;
+    document.getElementById("compact-list").hidden = !c;
+    // Hide the Compact toggle on mobile since the view is forced compact.
+    const compactLabel = document.getElementById("compact").closest("label");
+    if (compactLabel) compactLabel.style.display = isMobile() ? "none" : "";
   }
 
   function renderRebirth() {
@@ -1292,7 +1434,7 @@
     applyTabVisibility();
     if (activeTab === "droidex") {
       applyCompactVisibility();
-      if (compact) renderCompact();
+      if (effectiveCompact()) renderCompact();
       else renderGrid();
     } else if (activeTab === "rebirth") {
       renderRebirth();
@@ -1333,6 +1475,10 @@
       renderAll();
     });
   });
+
+  // Re-render when crossing the mobile breakpoint so we switch between
+  // grid and compact view automatically.
+  MOBILE_MQ.addEventListener("change", () => renderAll());
   document.getElementById("reset").addEventListener("click", () => {
     if (!confirm("Clear all collected droids? This sets every tier back to not built.")) return;
     localStorage.removeItem(STORAGE_KEY);
