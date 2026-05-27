@@ -589,7 +589,7 @@
   .tab-panel.active { display: block; }
 
   /* Hide Droidex-only controls when Rebirth tab is active */
-  body.tab-rebirth .tab-droidex-only { display: none !important; }
+  body:not(.tab-droidex) .tab-droidex-only { display: none !important; }
 
   /* ---------- REBIRTH PANEL (static info) ---------- */
   .reb-list {
@@ -734,6 +734,144 @@
     font-weight: 500;
   }
   .reb-intro b { color: var(--imperial-gold-soft); font-weight: 700; }
+
+  /* ---------- EVENT BADGE (event-only droids) ---------- */
+  .event-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 8px;
+    padding: 2px 7px;
+    font-family: "Orbitron", sans-serif;
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: #fff5d0;
+    background: linear-gradient(135deg, rgba(255, 40, 72, 0.85), rgba(255, 138, 8, 0.85));
+    border: 1px solid rgba(255, 214, 10, 0.55);
+    border-radius: 3px;
+    box-shadow: 0 0 8px rgba(255, 40, 72, 0.35), inset 0 0 4px rgba(0, 0, 0, 0.25);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+  .event-badge::before {
+    content: "◆";
+    font-size: 7px;
+    color: var(--imperial-gold-soft);
+    text-shadow: 0 0 4px var(--imperial-gold);
+  }
+  .compact-row .event-badge { margin-left: 4px; font-size: 8px; padding: 1px 6px; }
+  @media (max-width: 720px) {
+    .event-badge { font-size: 8px; letter-spacing: 1.3px; padding: 1px 5px; }
+  }
+
+  /* ---------- PAINTS PANEL ---------- */
+  .paint-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+  }
+  .paint-intro {
+    grid-column: 1 / -1;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin: 4px 0 6px;
+    padding: 12px 14px;
+    background: linear-gradient(180deg, rgba(13, 20, 38, 0.5), rgba(13, 20, 38, 0.2));
+    border: 1px solid var(--border);
+    border-left: 2px solid var(--hologram);
+    font-weight: 500;
+  }
+  .paint-intro b { color: var(--hologram); font-weight: 700; }
+  .paint-card {
+    position: relative;
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--border);
+    padding: 14px 16px 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  }
+  .paint-card::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--paint-accent, var(--hologram));
+    box-shadow: 0 0 10px var(--paint-accent, var(--hologram));
+    opacity: 0.7;
+  }
+  .paint-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .paint-name {
+    font-family: "Orbitron", sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .paint-tag {
+    flex-shrink: 0;
+    padding: 2px 8px;
+    font-family: "Orbitron", sans-serif;
+    font-size: 8.5px;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    border-radius: 3px;
+    border: 1px solid var(--border-bright);
+    color: var(--muted);
+    background: var(--panel-3);
+    white-space: nowrap;
+  }
+  .paint-tag.event {
+    color: #fff5d0;
+    background: linear-gradient(135deg, rgba(255, 40, 72, 0.85), rgba(255, 138, 8, 0.85));
+    border-color: rgba(255, 214, 10, 0.55);
+    box-shadow: 0 0 6px rgba(255, 40, 72, 0.3);
+  }
+  .paint-tag.challenge {
+    color: #e0fbff;
+    background: linear-gradient(135deg, var(--hologram-dim), #0e80a8);
+    border-color: var(--hologram);
+    box-shadow: 0 0 6px rgba(24, 224, 255, 0.3);
+  }
+  .paint-tag.default {
+    color: #f4f6fc;
+    background: linear-gradient(135deg, #2a3760, #3a4a7a);
+  }
+  .paint-source {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .paint-source b {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .paint-event {
+    margin-top: 2px;
+    font-family: "Orbitron", sans-serif;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: var(--imperial-gold);
+  }
+  @media (max-width: 720px) {
+    .paint-list { grid-template-columns: 1fr; }
+    .paint-card { padding: 12px 14px 12px 16px; }
+    .paint-name { font-size: 12px; }
+  }
 
   /* ---------- COMPACT MODE ---------- */
   .compact-list {
@@ -1038,6 +1176,7 @@
 <nav class="tabs">
   <button class="tab active" data-tab="droidex">Droidex</button>
   <button class="tab" data-tab="rebirth">Rebirth</button>
+  <button class="tab" data-tab="paints">Paints</button>
 </nav>
 
 <main>
@@ -1063,6 +1202,10 @@
 
     <section id="tab-rebirth" class="tab-panel">
       <div class="reb-list" id="reb-list"></div>
+    </section>
+
+    <section id="tab-paints" class="tab-panel">
+      <div class="paint-list" id="paint-list"></div>
     </section>
 
     <footer>
@@ -1128,9 +1271,9 @@
     { name: "CYCLO-GRAV",     type: "Battle",    rarity: "Legendary", income: [1260, 2520, 5040, 10080] },
     { name: "OPTI-STRK",      type: "Battle",    rarity: "Legendary", income: [1510, 3020, 6040, 12080] },
 
-    { name: "BB-8",           type: "Astromech", rarity: "Mythic",    income: [null, null, null, null] },
-    { name: "MISTER BONES",   type: "Battle",    rarity: "Mythic",    income: [null, null, null, null] },
-    { name: "IG-11 MARSHAL",  type: "Battle",    rarity: "Mythic",    income: [null, null, null, null] },
+    { name: "BB-8",           type: "Astromech", rarity: "Mythic",    income: [null, null, null, null], event: "BB-8 Event" },
+    { name: "MISTER BONES",   type: "Battle",    rarity: "Mythic",    income: [null, null, null, null], event: "Mister Bones Event" },
+    { name: "IG-11 MARSHAL",  type: "Battle",    rarity: "Mythic",    income: [null, null, null, null], event: "Mandalorian Event" },
   ];
 
   // upgrade-chip cost to REACH that tier (per droid rarity)
@@ -1168,6 +1311,64 @@
     { level: 18, credits: 325_000_000_000,    reqs: [["BB9","Diamond"],["R7","Diamond"],["MONO-WLKR","Rainbow"]] },
     { level: 19, credits: 810_000_000_000,    reqs: [["B2-RP","Rainbow"],["CYCLO-GRAV","Rainbow"],["PROTO-ROLLER","Rainbow"]] },
     { level: 20, credits: 2_000_000_000_000,  reqs: [["R7","Rainbow"],["OPTI-STRK","Rainbow"],["MECHA-DROID","Rainbow"]] },
+  ];
+
+  // Workshop paints — what they are and how to unlock them.
+  // category drives the coloured tag: event | challenge | default.
+  // accent is the CSS colour for the left edge of the card.
+  const PAINTS = [
+    {
+      name: "Workshop Default",
+      category: "default",
+      accent: "#7e8aaa",
+      source: "Unlocked from the moment you build your first Droidsmith Base — no requirement.",
+    },
+    {
+      name: "Resistance Regalia",
+      category: "event",
+      event: "BB-8 Event",
+      accent: "#ff8a08",
+      source: "Bring any <b>BB-series</b> droid (BB, BB-8, BB9 etc.) to Poe Dameron as your active companion during the BB-8 weekend event.",
+    },
+    {
+      name: "Rebel Workshop",
+      category: "event",
+      event: "BB-8 Event",
+      accent: "#ff2848",
+      source: "Complete the full BB-8 event quest by crafting and delivering <b>10 BB-series droids</b> to Poe Dameron at his X-Wing.",
+    },
+    {
+      name: "Bones Workshop",
+      category: "event",
+      event: "Mister Bones Event",
+      accent: "#c83cff",
+      source: "Earned during the Mister Bones event by clearing the Stormtrooper assault around the Sandcrawler and turning in the event objective.",
+    },
+    {
+      name: "Mandalorian Workshop",
+      category: "event",
+      event: "Mandalorian Event",
+      accent: "#18e0ff",
+      source: "Return <b>25 Beskar</b> from stolen crates to the Mando Hologram in the lobby during the Mando weekend event.",
+    },
+    {
+      name: "Flawless",
+      category: "challenge",
+      accent: "#18e0ff",
+      source: "Craft a total of <b>15 Flawless droids</b> (Flawless rolls come from the Pit Droid in the cantina or from the +50% Flawless event buff).",
+    },
+    {
+      name: "Super Flawless",
+      category: "challenge",
+      accent: "#ffd60a",
+      source: "Craft a total of <b>50 Flawless droids</b> across your account. The +50% Flawless buff during weekend events makes this much faster.",
+    },
+    {
+      name: "Ring Master",
+      category: "challenge",
+      accent: "#ffd60a",
+      source: "Complete the <b>jetpack parkour course</b> through every golden ring near the Firing Range (unlocks after Rebirth 7 when the Mandalorian Jetpack becomes available).",
+    },
   ];
 
   // ---------- STATE ----------
@@ -1271,9 +1472,12 @@
       head.className = "row-head";
       head.dataset.name = d.name;
       head.style.setProperty("--rarity-color", RARITY_COLOR[d.rarity]);
+      const eventBadge = d.event
+        ? `<span class="event-badge" title="${d.event} only">Event</span>`
+        : "";
       head.innerHTML = `
-        <div class="name">${d.name}</div>
-        <div class="meta">${d.rarity} · ${d.type}</div>
+        <div class="name">${d.name}${eventBadge}</div>
+        <div class="meta">${d.rarity} · ${d.type}${d.event ? ` · ${d.event}` : ""}</div>
       `;
       grid.appendChild(head);
 
@@ -1362,10 +1566,13 @@
           title="${t}${isTbc ? " (TBC)" : ""}"
         >${t}</button>`;
       }).join("");
+      const eventBadge = d.event
+        ? `<span class="event-badge" title="${d.event} only">Event</span>`
+        : "";
       row.innerHTML = `
         <div class="name-block">
-          <span class="name">${d.name}</span>
-          <span class="meta">${d.rarity} · ${d.type}</span>
+          <span class="name">${d.name}${eventBadge}</span>
+          <span class="meta">${d.rarity} · ${d.type}${d.event ? ` · ${d.event}` : ""}</span>
         </div>
         <div class="pills">${pillsHtml}</div>
       `;
@@ -1423,11 +1630,39 @@
     }
   }
 
+  function renderPaints() {
+    const list = document.getElementById("paint-list");
+    list.innerHTML = "";
+    const intro = document.createElement("div");
+    intro.className = "paint-intro";
+    intro.innerHTML = `Workshop paints are cosmetic skins for your base. <b>Event</b> paints are limited-time and rotate — miss them and you wait for the next event window. <b>Challenge</b> paints are always available; just grind the unlock.`;
+    list.appendChild(intro);
+    for (const p of PAINTS) {
+      const card = document.createElement("div");
+      card.className = "paint-card";
+      if (p.accent) card.style.setProperty("--paint-accent", p.accent);
+      const tagLabel =
+        p.category === "event" ? "Event Only" :
+        p.category === "challenge" ? "Challenge" :
+        "Default";
+      card.innerHTML = `
+        <div class="paint-card-head">
+          <div class="paint-name">${p.name}</div>
+          <span class="paint-tag ${p.category}">${tagLabel}</span>
+        </div>
+        ${p.event ? `<div class="paint-event">${p.event}</div>` : ""}
+        <div class="paint-source">${p.source}</div>
+      `;
+      list.appendChild(card);
+    }
+  }
+
   let activeTab = "droidex";
 
   function applyTabVisibility() {
     document.body.classList.toggle("tab-rebirth", activeTab === "rebirth");
     document.body.classList.toggle("tab-droidex", activeTab === "droidex");
+    document.body.classList.toggle("tab-paints", activeTab === "paints");
     document.querySelectorAll(".tab-panel").forEach((p) => {
       p.classList.toggle("active", p.id === `tab-${activeTab}`);
     });
@@ -1444,6 +1679,8 @@
       else renderGrid();
     } else if (activeTab === "rebirth") {
       renderRebirth();
+    } else if (activeTab === "paints") {
+      renderPaints();
     }
     renderStats();
   }
