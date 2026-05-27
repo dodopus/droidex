@@ -1144,25 +1144,29 @@
   const TIERS = ["Default", "Gold", "Diamond", "Rainbow"];
   const TIER_KEY = { Default: "default", Gold: "gold", Diamond: "diamond", Rainbow: "rainbow" };
 
-  // Rebirth requirements — credits cost + 3 required droids at specific tiers
+  // Rebirth requirements — credits cost + 3 required droids at specific tiers.
+  // Levels 11+ reflect the May 12 2026 rebalance; levels 18-20 added in that patch.
   const REBIRTHS = [
-    { level: 1,  credits: 10_000,           reqs: [["CB","Default"],["PIT","Default"],["DRK-1 PROBE","Default"]] },
-    { level: 2,  credits: 150_000,          reqs: [["BDX EXPLORER","Default"],["2BB","Default"],["BAL-CORE","Default"]] },
-    { level: 3,  credits: 975_000,          reqs: [["A-LT","Default"],["BU-4D","Default"],["R9","Gold"]] },
-    { level: 4,  credits: 2_950_000,        reqs: [["ARG","Gold"],["B1 SECURITY","Gold"],["GROUNDMECH","Default"]] },
-    { level: 5,  credits: 5_350_000,        reqs: [["BU-4D","Gold"],["HOV-R","Gold"],["R9","Diamond"]] },
-    { level: 6,  credits: 9_850_000,        reqs: [["GROUNDMECH","Gold"],["ARG","Diamond"],["A-LT","Diamond"]] },
-    { level: 7,  credits: 14_500_000,       reqs: [["BB","Gold"],["B1 SECURITY","Diamond"],["BU-4D","Diamond"]] },
-    { level: 8,  credits: 36_000_000,       reqs: [["UTIL-TEC","Gold"],["LO","Gold"],["HOV-R","Diamond"]] },
-    { level: 9,  credits: 89_000_000,       reqs: [["GROUNDMECH","Rainbow"],["R6","Gold"],["TRAK-R","Gold"]] },
-    { level: 10, credits: 220_000_000,      reqs: [["LO","Rainbow"],["HAUL-R","Rainbow"],["STRIKE-ORB","Gold"]] },
-    { level: 11, credits: 550_000_000,      reqs: [["AMP WALKER","Rainbow"],["B1 HEAVY","Rainbow"],["BB9","Gold"]] },
-    { level: 12, credits: 1_360_000_000,    reqs: [["PROTO-ROLLER","Rainbow"],["MECHA-DROID","Diamond"],["MONO-WLKR","Gold"]] },
-    { level: 13, credits: 3_400_000_000,    reqs: [["R7","Rainbow"],["CYCLO-GRAV","Rainbow"],["B2-RP","Rainbow"]] },
-    { level: 14, credits: 8_450_000_000,    reqs: [["OPTI-STRK","Rainbow"],["MONO-WLKR","Rainbow"],["MECHA-DROID","Rainbow"]] },
-    { level: 15, credits: 21_000_000_000,   reqs: [["R7","Rainbow"],["CYCLO-GRAV","Rainbow"],["B2-RP","Rainbow"]] },
-    { level: 16, credits: 52_000_000_000,   reqs: [["OPTI-STRK","Rainbow"],["MONO-WLKR","Rainbow"],["PROTO-ROLLER","Rainbow"]] },
-    { level: 17, credits: 130_000_000_000,  reqs: [["B2-RP","Rainbow"],["CYCLO-GRAV","Rainbow"],["MECHA-DROID","Rainbow"]] },
+    { level: 1,  credits: 10_000,             reqs: [["CB","Default"],["PIT","Default"],["DRK-1 PROBE","Default"]] },
+    { level: 2,  credits: 150_000,            reqs: [["BDX EXPLORER","Default"],["2BB","Default"],["BAL-CORE","Default"]] },
+    { level: 3,  credits: 975_000,            reqs: [["A-LT","Default"],["BU-4D","Default"],["R9","Gold"]] },
+    { level: 4,  credits: 2_950_000,          reqs: [["ARG","Gold"],["B1 SECURITY","Gold"],["GROUNDMECH","Default"]] },
+    { level: 5,  credits: 5_350_000,          reqs: [["BU-4D","Gold"],["HOV-R","Gold"],["R9","Diamond"]] },
+    { level: 6,  credits: 9_850_000,          reqs: [["GROUNDMECH","Gold"],["ARG","Diamond"],["A-LT","Diamond"]] },
+    { level: 7,  credits: 14_500_000,         reqs: [["BB","Gold"],["B1 SECURITY","Diamond"],["BU-4D","Diamond"]] },
+    { level: 8,  credits: 36_000_000,         reqs: [["UTIL-TEC","Gold"],["LO","Gold"],["HOV-R","Diamond"]] },
+    { level: 9,  credits: 89_000_000,         reqs: [["GROUNDMECH","Rainbow"],["R6","Gold"],["TRAK-R","Gold"]] },
+    { level: 10, credits: 220_000_000,        reqs: [["LO","Rainbow"],["HAUL-R","Rainbow"],["STRIKE-ORB","Gold"]] },
+    { level: 11, credits: 550_000_000,        reqs: [["AMP WALKER","Rainbow"],["B1 HEAVY","Rainbow"],["BB9","Default"]] },
+    { level: 12, credits: 1_360_000_000,      reqs: [["PROTO-ROLLER","Gold"],["MECHA-DROID","Default"],["MONO-WLKR","Default"]] },
+    { level: 13, credits: 3_400_000_000,      reqs: [["R7","Default"],["CYCLO-GRAV","Default"],["B2-RP","Default"]] },
+    { level: 14, credits: 8_450_000_000,      reqs: [["OPTI-STRK","Default"],["MONO-WLKR","Gold"],["MECHA-DROID","Gold"]] },
+    { level: 15, credits: 21_000_000_000,     reqs: [["B2-RP","Gold"],["BB9","Gold"],["R7","Gold"]] },
+    { level: 16, credits: 52_000_000_000,     reqs: [["OPTI-STRK","Gold"],["MONO-WLKR","Diamond"],["PROTO-ROLLER","Diamond"]] },
+    { level: 17, credits: 130_000_000_000,    reqs: [["B2-RP","Diamond"],["CYCLO-GRAV","Diamond"],["MECHA-DROID","Diamond"]] },
+    { level: 18, credits: 325_000_000_000,    reqs: [["BB9","Diamond"],["R7","Diamond"],["MONO-WLKR","Rainbow"]] },
+    { level: 19, credits: 810_000_000_000,    reqs: [["B2-RP","Rainbow"],["CYCLO-GRAV","Rainbow"],["PROTO-ROLLER","Rainbow"]] },
+    { level: 20, credits: 2_000_000_000_000,  reqs: [["R7","Rainbow"],["OPTI-STRK","Rainbow"],["MECHA-DROID","Rainbow"]] },
   ];
 
   // ---------- STATE ----------
@@ -1215,9 +1219,10 @@
 
   function fmtCredits(n) {
     if (n == null) return "";
-    if (n >= 1e9) return (n / 1e9).toFixed(2).replace(/\.?0+$/, "") + "B";
-    if (n >= 1e6) return (n / 1e6).toFixed(2).replace(/\.?0+$/, "") + "M";
-    if (n >= 1e3) return (n / 1e3).toFixed(1).replace(/\.?0+$/, "") + "K";
+    if (n >= 1e12) return (n / 1e12).toFixed(2).replace(/\.?0+$/, "") + "T";
+    if (n >= 1e9)  return (n / 1e9 ).toFixed(2).replace(/\.?0+$/, "") + "B";
+    if (n >= 1e6)  return (n / 1e6 ).toFixed(2).replace(/\.?0+$/, "") + "M";
+    if (n >= 1e3)  return (n / 1e3 ).toFixed(1).replace(/\.?0+$/, "") + "K";
     return String(n);
   }
 
